@@ -94,5 +94,3 @@ dist
 tmp/*
 
 __tests__/database.sqlite
-
-src/files/horarios/*.png
