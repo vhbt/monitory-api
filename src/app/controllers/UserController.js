@@ -15,17 +15,18 @@ class UserController {
   }
 
   async update(req, res) {
-    const { id, email, curso_ano } = req.body;
+    const { id, email, curso_ano, curso_turno } = req.body;
 
     try {
       const user = await User.findByPk(id);
 
       user.email = email;
       user.curso_ano = curso_ano;
+      user.curso_turno = curso_turno;
 
       user.save();
 
-      return res.json({ email, curso_ano });
+      return res.json({ email, curso_ano, curso_turno });
     } catch (err) {
       return res.status(400).json({ type: 'error', detail: err });
     }

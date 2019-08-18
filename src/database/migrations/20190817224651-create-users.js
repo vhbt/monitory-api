@@ -52,6 +52,9 @@ module.exports = {
       curso_ano: {
         type: Sequelize.INTEGER,
       },
+      curso_turno: {
+        type: Sequelize.STRING,
+      },
       campus: {
         type: Sequelize.STRING,
         allowNull: false,

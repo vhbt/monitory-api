@@ -7,6 +7,7 @@ export default async (req, res, next) => {
       .email()
       .required(),
     curso_ano: Yup.number().required(),
+    curso_turno: Yup.string().required(),
   });
 
   if (!(await validationSchema.isValid(req.body))) {

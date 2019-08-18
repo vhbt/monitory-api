@@ -15,6 +15,7 @@ class User extends Model {
         nome_completo: Sequelize.STRING,
         curso: Sequelize.STRING,
         curso_ano: Sequelize.INTEGER,
+        curso_turno: Sequelize.STRING,
         campus: Sequelize.STRING,
         situacao: Sequelize.STRING,
         curriculo_lattes: Sequelize.STRING,
