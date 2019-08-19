@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "dev": "nodemon src/server.js",
-    "scraper": "nodemon src/scraper.js"
+    "scraper": "nodemon src/scraper.js",
+    "build": "sucrase ./src -d ./dist --transforms imports",
+    "start": "node dist/server.js"
   },
   "devDependencies": {
     "eslint": "^6.1.0",
