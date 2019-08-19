@@ -66,6 +66,10 @@ module.exports = {
       curriculo_lattes: {
         type: Sequelize.STRING,
       },
+      admin: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false,
+      },
       created_at: {
         type: Sequelize.DATE,
         allowNull: false,
