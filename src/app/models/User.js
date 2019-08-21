@@ -19,6 +19,7 @@ class User extends Model {
         campus: Sequelize.STRING,
         situacao: Sequelize.STRING,
         curriculo_lattes: Sequelize.STRING,
+        admin: Sequelize.BOOLEAN,
       },
       {
         sequelize,

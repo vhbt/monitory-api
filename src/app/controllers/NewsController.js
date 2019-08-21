@@ -5,7 +5,9 @@ import AuthenticateUserService from '../services/AuthenticateUserService';
 
 class NewsController {
   async index(req, res) {
-    const news = await News.findAll();
+    const news = await News.findAll({
+      order: [['created_at', 'DESC']],
+    });
 
     return res.json(news);
   }
