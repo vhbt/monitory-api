@@ -49,6 +49,8 @@ class NewsController {
       return res.status(401).json({ type: 'error', detail: 'Unauthorized.' });
     }
   }
+
+  async delete(req, res) {}
 }
 
 export default new NewsController();

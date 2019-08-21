@@ -71,6 +71,7 @@ const urls = [
 
 (async () => {
   async function scrape(path, name) {
+    console.log(`Baixando horario de ${name}`);
     const browser = await puppeteer.launch({
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
@@ -83,5 +84,9 @@ const urls = [
     await browser.close();
   }
 
-  urls.forEach(url => scrape(url.path, url.name));
+  urls.forEach((url, index) => {
+    setTimeout(() => {
+      scrape(url.path, url.name);
+    }, 2000 * index);
+  });
 })();
