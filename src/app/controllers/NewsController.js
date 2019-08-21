@@ -50,7 +50,41 @@ class NewsController {
     }
   }
 
-  async delete(req, res) {}
+  async delete(req, res) {
+    const authHeader = req.headers.authorization;
+
+    if (!authHeader) {
+      return res.status(401).json({ type: 'error', detail: 'Unauthorized.' });
+    }
+
+    const [, token] = authHeader.split(' ');
+
+    try {
+      const { id } = await AuthenticateUserService.run({ token });
+
+      const userIsAdmin = await User.findOne({
+        where: {
+          id,
+          admin: true,
+        },
+      });
+
+      if (!userIsAdmin)
+        return res.status(401).json({ type: 'error', detail: 'Unauthorized.' });
+
+      const { id: news_id } = req.body;
+
+      await News.destroy({
+        where: {
+          id: news_id,
+        },
+      });
+
+      return res.json({ type: 'success', detail: 'Noticia deletada!' });
+    } catch (err) {
+      return res.status(401).json({ type: 'error', detail: 'Unauthorized.' });
+    }
+  }
 }
 
 export default new NewsController();

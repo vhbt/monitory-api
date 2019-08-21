@@ -6,7 +6,9 @@ export default async (req, res, next) => {
   });
 
   if (!(await validationSchema.isValid(req.body))) {
-    return res.status(400).json({ type: 'error', detail: 'Validation fails.' });
+    return res
+      .status(400)
+      .json({ type: 'error', detail: 'Verifique seus dados.' });
   }
   return next();
 };
