@@ -16,7 +16,7 @@ class NewsController {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return res.status(401).json({ type: 'error', detail: 'Unauthorized.' });
+      return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
     }
 
     const [, token] = authHeader.split(' ');
@@ -32,7 +32,9 @@ class NewsController {
       });
 
       if (!userIsAdmin)
-        return res.status(401).json({ type: 'error', detail: 'Unauthorized.' });
+        return res
+          .status(401)
+          .json({ type: 'error', detail: 'Não autorizado.' });
 
       const { title, description, content, tags, banner } = req.body;
 
@@ -46,7 +48,7 @@ class NewsController {
 
       return res.json(news);
     } catch (err) {
-      return res.status(401).json({ type: 'error', detail: 'Unauthorized.' });
+      return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
     }
   }
 
@@ -54,7 +56,7 @@ class NewsController {
     const authHeader = req.headers.authorization;
 
     if (!authHeader) {
-      return res.status(401).json({ type: 'error', detail: 'Unauthorized.' });
+      return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
     }
 
     const [, token] = authHeader.split(' ');
@@ -70,7 +72,9 @@ class NewsController {
       });
 
       if (!userIsAdmin)
-        return res.status(401).json({ type: 'error', detail: 'Unauthorized.' });
+        return res
+          .status(401)
+          .json({ type: 'error', detail: 'Não autorizado.' });
 
       const { id: news_id } = req.body;
 
@@ -80,9 +84,9 @@ class NewsController {
         },
       });
 
-      return res.json({ type: 'success', detail: 'Noticia deletada!' });
+      return res.json({ type: 'success', detail: 'Notícia deletada!' });
     } catch (err) {
-      return res.status(401).json({ type: 'error', detail: 'Unauthorized.' });
+      return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
     }
   }
 }
