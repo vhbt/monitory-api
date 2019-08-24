@@ -20,6 +20,8 @@ const routes = new Router();
 
 const upload = multer(multerConfig);
 
+routes.get('/', (req, res) => res.send('ok'));
+
 routes.post('/users', validateUserStore, UserController.store);
 routes.put('/users', validateUserUpdate, UserController.update);
 

@@ -85,13 +85,13 @@ class Scraper {
       await browser.close();
     }
 
-    await urls.forEach((url, index) => {
-      setTimeout(() => {
-        scrape(url.path, url.name);
+    urls.forEach((url, index) => {
+      setTimeout(async () => {
+        await scrape(url.path, url.name);
       }, 1000 * index);
     });
 
-    return res.json({ type: 'success', detail: 'Schedules scraped.' });
+    return res.send('scrapping...');
   }
 }
 
