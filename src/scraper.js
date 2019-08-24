@@ -1,5 +1,6 @@
 import puppeteer from 'puppeteer';
 import { resolve } from 'path';
+import { Storage } from '@google-cloud/storage';
 
 const urls = [
   {
@@ -72,7 +73,8 @@ const urls = [
 class Scraper {
   async run(req, res) {
     async function scrape(path, name) {
-      console.log(`Baixando horario de ${name}`);
+      console.log(`[STARTED] Baixando horario de ${name}`);
+      const file_path = resolve(__dirname, '..', 'tmp', `${name}.png`);
       const browser = await puppeteer.launch({
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
       });
@@ -80,18 +82,29 @@ class Scraper {
       await page.setViewport({ width: 1140, height: 775 });
       await page.goto(path);
       await page.screenshot({
-        path: resolve(__dirname, 'files', 'horarios', `${name}.png`),
+        path: file_path,
       });
+
+      const storage = new Storage({
+        projectId: process.env.GCLOUD_PROJECT,
+      });
+
+      const bucket = storage.bucket(process.env.GCLOUD_BUCKET);
+
+      await bucket.upload(file_path, {
+        public: true,
+      });
+
       await browser.close();
     }
 
     urls.forEach((url, index) => {
       setTimeout(async () => {
         await scrape(url.path, url.name);
-      }, 1000 * index);
+      }, 10000 * index);
     });
 
-    return res.send('scrapping...');
+    return res.send('scrapping started...');
   }
 }
 

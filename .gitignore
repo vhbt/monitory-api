@@ -91,6 +91,6 @@ dist
 # DynamoDB Local files
 .dynamodb/
 
-tmp/*
-
 __tests__/database.sqlite
+
+.swp

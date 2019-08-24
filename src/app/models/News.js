@@ -9,12 +9,6 @@ class News extends Model {
         content: Sequelize.TEXT,
         tags: Sequelize.STRING,
         banner: Sequelize.STRING,
-        banner_path: {
-          type: Sequelize.VIRTUAL,
-          get() {
-            return `${process.env.PUBLIC_URL}${this.banner}`;
-          },
-        },
       },
       {
         sequelize,
