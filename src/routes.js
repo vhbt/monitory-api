@@ -14,6 +14,8 @@ import validateFileStore from './app/validators/FileStore';
 
 import FileController from './app/controllers/FileController';
 
+import scrapeSchedules from './scraper';
+
 const routes = new Router();
 
 const upload = multer(multerConfig);
@@ -31,5 +33,7 @@ routes.post(
   validateFileStore,
   FileController.store
 );
+
+routes.get('/scrape-schedules', scrapeSchedules.run);
 
 export default routes;

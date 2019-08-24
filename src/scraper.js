@@ -69,24 +69,30 @@ const urls = [
   },
 ];
 
-(async () => {
-  async function scrape(path, name) {
-    console.log(`Baixando horario de ${name}`);
-    const browser = await puppeteer.launch({
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-    const page = await browser.newPage();
-    await page.setViewport({ width: 1140, height: 775 });
-    await page.goto(path);
-    await page.screenshot({
-      path: resolve(__dirname, 'files', 'horarios', `${name}.png`),
-    });
-    await browser.close();
-  }
+class Scraper {
+  async run(req, res) {
+    async function scrape(path, name) {
+      console.log(`Baixando horario de ${name}`);
+      const browser = await puppeteer.launch({
+        args: ['--no-sandbox', '--disable-setuid-sandbox'],
+      });
+      const page = await browser.newPage();
+      await page.setViewport({ width: 1140, height: 775 });
+      await page.goto(path);
+      await page.screenshot({
+        path: resolve(__dirname, 'files', 'horarios', `${name}.png`),
+      });
+      await browser.close();
+    }
 
-  urls.forEach((url, index) => {
-    setTimeout(() => {
-      scrape(url.path, url.name);
-    }, 2000 * index);
-  });
-})();
+    await urls.forEach((url, index) => {
+      setTimeout(() => {
+        scrape(url.path, url.name);
+      }, 1000 * index);
+    });
+
+    return res.json({ type: 'success', detail: 'Schedules scraped.' });
+  }
+}
+
+export default new Scraper();
