@@ -10,6 +10,7 @@ import validateUserStore from './app/validators/UserStore';
 import validateUserUpdate from './app/validators/UserUpdate';
 import validateNewsStore from './app/validators/NewsStore';
 import validateNewsDelete from './app/validators/NewsDelete';
+import validateFileStore from './app/validators/FileStore';
 
 import FileController from './app/controllers/FileController';
 
@@ -24,6 +25,11 @@ routes.get('/news', NewsController.index);
 routes.post('/news', validateNewsStore, NewsController.store);
 routes.delete('/news', validateNewsDelete, NewsController.delete);
 
-routes.post('/files', upload.single('file'), FileController.store);
+routes.post(
+  '/files',
+  upload.single('file'),
+  validateFileStore,
+  FileController.store
+);
 
 export default routes;
