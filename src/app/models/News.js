@@ -5,10 +5,10 @@ class News extends Model {
     super.init(
       {
         title: Sequelize.STRING,
-        description: Sequelize.STRING,
         content: Sequelize.TEXT,
-        tags: Sequelize.STRING,
+        category: Sequelize.STRING,
         banner: Sequelize.STRING,
+        banner_thumb: Sequelize.STRING,
       },
       {
         sequelize,

@@ -11,19 +11,20 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      description: {
-        type: Sequelize.STRING,
-        allowNull: false,
-      },
       content: {
         type: Sequelize.TEXT,
         allowNull: false,
       },
-      tags: {
+      category: {
         type: Sequelize.STRING,
       },
       banner: {
         type: Sequelize.STRING,
+        allowNull: false,
+      },
+      banner_thumb: {
+        type: Sequelize.STRING,
+        allowNull: false,
       },
       created_at: {
         type: Sequelize.DATE,

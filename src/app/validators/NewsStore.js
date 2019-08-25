@@ -3,10 +3,10 @@ import * as Yup from 'yup';
 export default async (req, res, next) => {
   const validationSchema = Yup.object().shape({
     title: Yup.string().required(),
-    description: Yup.string().required(),
     content: Yup.string().required(),
-    tags: Yup.string(),
+    category: Yup.string(),
     banner: Yup.string().required(),
+    banner_thumb: Yup.string().required(),
   });
 
   if (!(await validationSchema.isValid(req.body))) {
