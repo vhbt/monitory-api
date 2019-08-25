@@ -12,5 +12,6 @@ env_variables:
   DB_NAME: ''
   GCLOUD_PROJECT: ''
   GCLOUD_BUCKET: ''
+  SENTRY_DSN: ''
 beta_settings:
   cloud_sql_instances: []

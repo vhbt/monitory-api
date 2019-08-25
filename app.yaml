@@ -12,5 +12,6 @@ env_variables:
   DB_NAME: 'monitory'
   GCLOUD_PROJECT: 'monitory-363ae'
   GCLOUD_BUCKET: 'monitory-363ae'
+  SENTRY_DSN: '***REMOVED***'
 beta_settings:
   cloud_sql_instances: [***REMOVED***]
