@@ -94,3 +94,5 @@ dist
 __tests__/database.sqlite
 
 .swp
+
+app.yaml
