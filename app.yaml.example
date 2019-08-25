@@ -1,16 +1,16 @@
 runtime: nodejs10
 env: standard
 env_variables:
-  API_URL: 'https://monitory-363ae.appspot.com'
+  API_URL: ''
   PORT: 8080
   NODE_ENV: 'development'
-  PUBLIC_URL: 'https://monitory-363ae.appspot.com'
+  PUBLIC_URL: ''
   DB_DIALECT: 'postgres'
-  DB_HOST: '***REMOVED***'
-  DB_USER: 'monitory'
-  DB_PASS: '***REMOVED***'
-  DB_NAME: 'monitory'
-  GCLOUD_PROJECT: 'monitory-363ae'
-  GCLOUD_BUCKET: 'monitory-363ae'
+  DB_HOST: ''
+  DB_USER: ''
+  DB_PASS: ''
+  DB_NAME: ''
+  GCLOUD_PROJECT: ''
+  GCLOUD_BUCKET: ''
 beta_settings:
-  cloud_sql_instances: [***REMOVED***]
+  cloud_sql_instances: []
