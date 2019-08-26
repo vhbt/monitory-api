@@ -8,7 +8,7 @@
     "scraper": "nodemon src/scraper.js",
     "build": "sucrase ./src -d ./dist --transforms imports",
     "gcp-build": "sucrase ./src -d ./dist --transforms imports",
-    "start": "node dist/server.js"
+    "start": "npx sequelize-cli db:migrate && node dist/server.js"
   },
   "devDependencies": {
     "eslint": "^6.1.0",
