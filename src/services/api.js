@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const api = axios.create({
+export const StudentSuapApi = axios.create({
   baseURL: 'https://suap.ifrn.edu.br/api/v2',
 });
 
-export default api;
+export const SuapApi = axios.create({
+  baseURL: 'https://suap.ifrn.edu.br/api/v2',
+});

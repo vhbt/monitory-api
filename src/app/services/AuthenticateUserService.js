@@ -1,11 +1,14 @@
 import User from '../models/User';
-import api from '../../services/api';
+import { StudentSuapApi } from '../../services/api';
 
 class AuthenticateUserService {
   async run({ token }) {
-    const response = await api.get('/minhas-informacoes/meus-dados/', {
-      headers: { Authorization: `JWT ${token}` },
-    });
+    const response = await StudentSuapApi.get(
+      '/minhas-informacoes/meus-dados/',
+      {
+        headers: { Authorization: `JWT ${token}` },
+      }
+    );
 
     const {
       id,
