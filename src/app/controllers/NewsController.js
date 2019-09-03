@@ -36,18 +36,10 @@ class NewsController {
           .status(401)
           .json({ type: 'error', detail: 'Não autorizado.' });
 
-      const {
-        title,
-        description,
-        content,
-        category,
-        banner,
-        banner_thumb,
-      } = req.body;
+      const { title, content, category, banner, banner_thumb } = req.body;
 
       const news = await News.create({
         title,
-        description,
         content,
         category,
         banner,

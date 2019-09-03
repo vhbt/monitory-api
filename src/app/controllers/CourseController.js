@@ -3,7 +3,7 @@ import UpdateCoursesService from '../services/UpdateCoursesService';
 
 class CourseController {
   async index(req, res) {
-    const response = await Course.findAll();
+    const response = await Course.findAll({ order: ['created_at', 'DESC'] });
 
     return res.json(response);
   }

@@ -19,6 +19,7 @@ class UserController {
           id,
           admin: true,
         },
+        order: [['created_at', 'DESC']],
       });
 
       if (!userIsAdmin)
