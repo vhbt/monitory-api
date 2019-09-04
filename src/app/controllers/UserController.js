@@ -27,9 +27,22 @@ class UserController {
           .status(401)
           .json({ type: 'error', detail: 'Não autorizado.' });
 
-      const users = await User.findAll();
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 8;
 
-      return res.json(users);
+      const totalCountResponse = await User.findAll();
+      const totalCount = totalCountResponse.length;
+
+      const users = await User.findAll({
+        limit,
+        offset: (page - 1) * limit,
+        order: [['created_at', 'DESC']],
+      });
+
+      return res.json({
+        totalCount,
+        users,
+      });
     } catch (err) {
       return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
     }

@@ -5,7 +5,12 @@ import AuthenticateUserService from '../services/AuthenticateUserService';
 
 class NewsController {
   async index(req, res) {
+    const page = req.query.page || 1;
+    const limit = req.query.limit || 5;
+
     const news = await News.findAll({
+      limit,
+      offset: (page - 1) * limit,
       order: [['created_at', 'DESC']],
     });
 

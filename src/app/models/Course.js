@@ -15,6 +15,10 @@ class Course extends Model {
     );
     return this;
   }
+
+  static associate(models) {
+    this.hasMany(models.Schedule, { foreignKey: 'course_id', as: 'course' });
+  }
 }
 
 export default Course;

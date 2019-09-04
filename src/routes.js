@@ -7,6 +7,7 @@ import UserController from './app/controllers/UserController';
 import NewsController from './app/controllers/NewsController';
 import FileController from './app/controllers/FileController';
 import CourseController from './app/controllers/CourseController';
+import ScheduleController from './app/controllers/ScheduleController';
 
 import validateUserStore from './app/validators/UserStore';
 import validateUserUpdate from './app/validators/UserUpdate';
@@ -40,6 +41,8 @@ routes.post(
 
 routes.get('/courses', CourseController.index);
 routes.post('/courses', validateCourseStore, CourseController.store);
+
+routes.get('/schedules', ScheduleController.index);
 
 routes.get('/scrape-schedules', scrapeSchedules.run);
 
