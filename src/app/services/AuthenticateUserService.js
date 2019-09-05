@@ -1,8 +1,10 @@
 import User from '../models/User';
+import Playerid from '../models/Playerid';
+import Course from '../models/Course';
 import { StudentSuapApi } from '../../services/api';
 
 class AuthenticateUserService {
-  async run({ token }) {
+  async run({ token, playerid }) {
     const response = await StudentSuapApi.get(
       '/minhas-informacoes/meus-dados/',
       {
@@ -32,6 +34,31 @@ class AuthenticateUserService {
     const userExists = await User.findByPk(id);
 
     if (userExists) {
+      const userPlayerids = await Playerid.findOne({
+        where: {
+          id: playerid,
+        },
+      });
+
+      if (!userPlayerids) {
+        const course = await Course.findOne({
+          where: {
+            description: userExists.curso,
+          },
+        });
+
+        const course_id = course.id;
+
+        await Playerid.create({
+          id: playerid,
+          user_id: userExists.id,
+          course_id,
+          year: userExists.curso_ano,
+          turn: userExists.curso_turno,
+          campus: userExists.campus,
+        });
+      }
+
       return userExists;
     }
 
@@ -49,6 +76,23 @@ class AuthenticateUserService {
       campus,
       situacao,
       curriculo_lattes,
+    });
+
+    const course = await Course.findOne({
+      where: {
+        description: newUser.curso,
+      },
+    });
+
+    const course_id = course.id;
+
+    await Playerid.create({
+      id: playerid,
+      user_id: newUser.id,
+      course_id,
+      year: newUser.curso_ano,
+      turn: newUser.curso_turno,
+      campus: newUser.campus,
     });
 
     return newUser;

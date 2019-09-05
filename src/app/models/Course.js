@@ -18,6 +18,7 @@ class Course extends Model {
 
   static associate(models) {
     this.hasMany(models.Schedule, { foreignKey: 'course_id', as: 'course' });
+    this.hasMany(models.Playerid, { foreignKey: 'course_id' });
   }
 }
 

@@ -28,6 +28,10 @@ class User extends Model {
 
     return this;
   }
+
+  static associate(models) {
+    this.hasMany(models.Playerid, { foreignKey: 'user_id', as: 'user' });
+  }
 }
 
 export default User;

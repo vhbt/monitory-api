@@ -1,4 +1,5 @@
 import User from '../models/User';
+import Playerid from '../models/Playerid';
 import AuthenticateUserService from '../services/AuthenticateUserService';
 
 class UserController {
@@ -49,10 +50,13 @@ class UserController {
   }
 
   async store(req, res) {
-    const { token } = req.body;
+    const { token, oneSignalPlayerId } = req.body;
 
     try {
-      const response = await AuthenticateUserService.run({ token });
+      const response = await AuthenticateUserService.run({
+        token,
+        playerid: oneSignalPlayerId,
+      });
 
       return res.json(response);
     } catch (err) {
@@ -61,16 +65,21 @@ class UserController {
   }
 
   async update(req, res) {
-    const { id, email, curso_ano, curso_turno } = req.body;
+    const { id, email, curso_ano, curso_turno, playerId } = req.body;
 
     try {
       const user = await User.findByPk(id);
+      const playerid = await Playerid.findByPk(playerId);
 
       user.email = email;
       user.curso_ano = curso_ano;
       user.curso_turno = curso_turno;
 
+      playerid.year = curso_ano;
+      playerid.turn = curso_turno;
+
       user.save();
+      playerid.save();
 
       return res.json({ email, curso_ano, curso_turno });
     } catch (err) {

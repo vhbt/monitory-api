@@ -1,13 +1,12 @@
 import Sequelize, { Model } from 'sequelize';
 
-class Schedule extends Model {
+class Playerid extends Model {
   static init(sequelize) {
     super.init(
       {
-        name: Sequelize.INTEGER,
         year: Sequelize.INTEGER,
         turn: Sequelize.STRING,
-        path: Sequelize.STRING,
+        campus: Sequelize.STRING,
       },
       {
         sequelize,
@@ -17,11 +16,9 @@ class Schedule extends Model {
   }
 
   static associate(models) {
-    this.belongsTo(models.Course, {
-      foreignKey: 'course_id',
-      as: 'course',
-    });
+    this.belongsTo(models.User, { foreignKey: 'user_id', as: 'user' });
+    this.belongsTo(models.Course, { foreignKey: 'course_id' });
   }
 }
 
-export default Schedule;
+export default Playerid;
