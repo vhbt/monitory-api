@@ -8,6 +8,7 @@ import NewsController from './app/controllers/NewsController';
 import FileController from './app/controllers/FileController';
 import CourseController from './app/controllers/CourseController';
 import ScheduleController from './app/controllers/ScheduleController';
+import PlayeridController from './app/controllers/PlayeridController';
 
 import validateUserStore from './app/validators/UserStore';
 import validateUserUpdate from './app/validators/UserUpdate';
@@ -43,6 +44,8 @@ routes.get('/courses', CourseController.index);
 routes.post('/courses', validateCourseStore, CourseController.store);
 
 routes.get('/schedules', ScheduleController.index);
+
+routes.delete('/playerid', PlayeridController.delete);
 
 routes.get('/scrape-schedules', scrapeSchedules.run);
 

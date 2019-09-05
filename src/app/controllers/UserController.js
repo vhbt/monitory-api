@@ -60,7 +60,7 @@ class UserController {
 
       return res.json(response);
     } catch (err) {
-      return res.status(400).json({ type: 'error', detail: err });
+      return res.status(400).json({ type: 'error', detail: 'err' });
     }
   }
 
