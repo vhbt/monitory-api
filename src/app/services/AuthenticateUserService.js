@@ -34,29 +34,31 @@ class AuthenticateUserService {
     const userExists = await User.findByPk(id);
 
     if (userExists) {
-      const userPlayerids = await Playerid.findOne({
-        where: {
-          id: playerid,
-        },
-      });
-
-      if (!userPlayerids) {
-        const course = await Course.findOne({
+      if (playerid) {
+        const userPlayerids = await Playerid.findOne({
           where: {
-            description: userExists.curso,
+            id: playerid,
           },
         });
 
-        const course_id = course.id;
+        if (!userPlayerids) {
+          const course = await Course.findOne({
+            where: {
+              description: userExists.curso,
+            },
+          });
 
-        await Playerid.create({
-          id: playerid,
-          user_id: userExists.id,
-          course_id,
-          year: userExists.curso_ano,
-          turn: userExists.curso_turno,
-          campus: userExists.campus,
-        });
+          const course_id = course.id;
+
+          await Playerid.create({
+            id: playerid,
+            user_id: userExists.id,
+            course_id,
+            year: userExists.curso_ano,
+            turn: userExists.curso_turno,
+            campus: userExists.campus,
+          });
+        }
       }
 
       return userExists;
@@ -78,22 +80,24 @@ class AuthenticateUserService {
       curriculo_lattes,
     });
 
-    const course = await Course.findOne({
-      where: {
-        description: newUser.curso,
-      },
-    });
+    if (playerid) {
+      const course = await Course.findOne({
+        where: {
+          description: newUser.curso,
+        },
+      });
 
-    const course_id = course.id;
+      const course_id = course.id;
 
-    await Playerid.create({
-      id: playerid,
-      user_id: newUser.id,
-      course_id,
-      year: newUser.curso_ano,
-      turn: newUser.curso_turno,
-      campus: newUser.campus,
-    });
+      await Playerid.create({
+        id: playerid,
+        user_id: newUser.id,
+        course_id,
+        year: newUser.curso_ano,
+        turn: newUser.curso_turno,
+        campus: newUser.campus,
+      });
+    }
 
     return newUser;
   }

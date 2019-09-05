@@ -69,17 +69,20 @@ class UserController {
 
     try {
       const user = await User.findByPk(id);
-      const playerid = await Playerid.findByPk(playerId);
 
       user.email = email;
       user.curso_ano = curso_ano;
       user.curso_turno = curso_turno;
-
-      playerid.year = curso_ano;
-      playerid.turn = curso_turno;
-
       user.save();
-      playerid.save();
+
+      if (playerId) {
+        const playerid = await Playerid.findByPk(playerId);
+
+        playerid.year = curso_ano;
+        playerid.turn = curso_turno;
+
+        playerid.save();
+      }
 
       return res.json({ email, curso_ano, curso_turno });
     } catch (err) {
