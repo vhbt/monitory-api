@@ -1,3 +1,4 @@
+import logger from '../../services/logger';
 import User from '../models/User';
 import Playerid from '../models/Playerid';
 import AuthenticateUserService from '../services/AuthenticateUserService';
@@ -45,6 +46,7 @@ class UserController {
         users,
       });
     } catch (err) {
+      logger.error(`error getting users list: '${err}`);
       return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
     }
   }
@@ -60,6 +62,7 @@ class UserController {
 
       return res.json(response);
     } catch (err) {
+      logger.error(`error in user store route: '${err}`);
       return res.status(400).json({ type: 'error', detail: 'err' });
     }
   }
@@ -84,8 +87,11 @@ class UserController {
         playerid.save();
       }
 
+      logger.info(``);
+
       return res.json({ email, curso_ano, curso_turno });
     } catch (err) {
+      logger.error(`error while updating user '${req.body.id}': '${err}`);
       return res.status(400).json({ type: 'error', detail: err });
     }
   }

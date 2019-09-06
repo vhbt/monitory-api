@@ -6,6 +6,7 @@ import Youch from 'youch';
 import cors from 'cors';
 import { resolve } from 'path';
 
+import logger from './services/logger';
 import routes from './routes';
 import SentryConfig from './config/sentry';
 
@@ -36,9 +37,10 @@ class App {
 
   exceptionHandler() {
     this.server.use(async (err, req, res, next) => {
-      if (process.env.NODE_ENV === 'development') {
-        const errors = await new Youch(err, req).toJSON();
+      const errors = await new Youch(err, req).toJSON();
+      logger.error(errors);
 
+      if (process.env.NODE_ENV === 'development') {
         return res.status(500).json(errors);
       }
       return res

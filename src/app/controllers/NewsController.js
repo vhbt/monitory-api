@@ -1,3 +1,4 @@
+import logger from '../../services/logger';
 import News from '../models/News';
 import User from '../models/User';
 
@@ -53,6 +54,7 @@ class NewsController {
 
       return res.json(news);
     } catch (err) {
+      logger.error(`error creating news: '${err}`);
       return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
     }
   }
@@ -89,8 +91,11 @@ class NewsController {
         },
       });
 
+      logger.info(`deleted news '${id}'`);
+
       return res.json({ type: 'success', detail: 'Notícia deletada!' });
     } catch (err) {
+      logger.error(`error deleting news: '${err}`);
       return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
     }
   }

@@ -9,6 +9,7 @@ import FileController from './app/controllers/FileController';
 import CourseController from './app/controllers/CourseController';
 import ScheduleController from './app/controllers/ScheduleController';
 import PlayeridController from './app/controllers/PlayeridController';
+import NotificationController from './app/controllers/NotificationController';
 
 import validateUserStore from './app/validators/UserStore';
 import validateUserUpdate from './app/validators/UserUpdate';
@@ -16,6 +17,8 @@ import validateNewsStore from './app/validators/NewsStore';
 import validateNewsDelete from './app/validators/NewsDelete';
 import validateFileStore from './app/validators/FileStore';
 import validateCourseStore from './app/validators/CourseStore';
+import validatePlayeridDelete from './app/validators/PlayeridDelete';
+import validateNotificationStore from './app/validators/NotificationStore';
 
 import scrapeSchedules from './scraper';
 
@@ -45,7 +48,13 @@ routes.post('/courses', validateCourseStore, CourseController.store);
 
 routes.get('/schedules', ScheduleController.index);
 
-routes.delete('/playerid', PlayeridController.delete);
+routes.delete('/playerid', validatePlayeridDelete, PlayeridController.delete);
+
+routes.post(
+  '/notifications',
+  validateNotificationStore,
+  NotificationController.store
+);
 
 routes.get('/scrape-schedules', scrapeSchedules.run);
 
