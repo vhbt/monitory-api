@@ -30,7 +30,7 @@ class User extends Model {
   }
 
   static associate(models) {
-    this.hasMany(models.Playerid, { foreignKey: 'user_id', as: 'user' });
+    this.hasMany(models.Playerid, { foreignKey: 'user_id', as: 'devices' });
   }
 }
 

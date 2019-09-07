@@ -59,6 +59,26 @@ class AuthenticateUserService {
               turn: userExists.curso_turno,
               campus: userExists.campus,
             });
+          } else {
+            const playeridAlreadyRegistered = await Playerid.findByPk(playerid);
+
+            if (playeridAlreadyRegistered) {
+              const course = await Course.findOne({
+                where: {
+                  description: userExists.curso,
+                },
+              });
+
+              const course_id = course.id;
+
+              playeridAlreadyRegistered.user_id = userExists.id;
+              playeridAlreadyRegistered.course_id = course_id;
+              playeridAlreadyRegistered.year = userExists.curso_ano;
+              playeridAlreadyRegistered.turn = userExists.curso_turno;
+              playeridAlreadyRegistered.campus = userExists.campus;
+
+              playeridAlreadyRegistered.save();
+            }
           }
         }
 
@@ -90,14 +110,26 @@ class AuthenticateUserService {
 
         const course_id = course.id;
 
-        await Playerid.create({
-          id: playerid,
-          user_id: newUser.id,
-          course_id,
-          year: newUser.curso_ano,
-          turn: newUser.curso_turno,
-          campus: newUser.campus,
-        });
+        const playeridAlreadyRegistered = await Playerid.findByPk(playerid);
+
+        if (playeridAlreadyRegistered) {
+          playeridAlreadyRegistered.user_id = newUser.id;
+          playeridAlreadyRegistered.course_id = course_id;
+          playeridAlreadyRegistered.year = newUser.curso_ano;
+          playeridAlreadyRegistered.turn = newUser.curso_turno;
+          playeridAlreadyRegistered.campus = newUser.campus;
+
+          playeridAlreadyRegistered.save();
+        } else {
+          await Playerid.create({
+            id: playerid,
+            user_id: newUser.id,
+            course_id,
+            year: newUser.curso_ano,
+            turn: newUser.curso_turno,
+            campus: newUser.campus,
+          });
+        }
       }
 
       return newUser;

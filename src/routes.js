@@ -21,6 +21,7 @@ import validatePlayeridDelete from './app/validators/PlayeridDelete';
 import validateNotificationStore from './app/validators/NotificationStore';
 
 import scrapeSchedules from './scraper';
+import OSCleaner from './oscleaner';
 
 const routes = new Router();
 
@@ -57,5 +58,6 @@ routes.post(
 );
 
 routes.get('/scrape-schedules', scrapeSchedules.run);
+routes.get('/oscleaner', OSCleaner.run);
 
 export default routes;

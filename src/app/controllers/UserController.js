@@ -16,35 +16,45 @@ class UserController {
     try {
       const { id } = await AuthenticateUserService.run({ token });
 
-      const userIsAdmin = await User.findOne({
-        where: {
-          id,
-          admin: true,
-        },
-        order: [['created_at', 'DESC']],
-      });
+      if (id) {
+        const userIsAdmin = await User.findOne({
+          where: {
+            id,
+            admin: true,
+          },
+          order: [['created_at', 'DESC']],
+        });
 
-      if (!userIsAdmin)
-        return res
-          .status(401)
-          .json({ type: 'error', detail: 'Não autorizado.' });
+        if (!userIsAdmin)
+          return res
+            .status(401)
+            .json({ type: 'error', detail: 'Não autorizado.' });
 
-      const page = req.query.page || 1;
-      const limit = req.query.limit || 8;
+        const page = req.query.page || 1;
+        const limit = req.query.limit || 8;
 
-      const totalCountResponse = await User.findAll();
-      const totalCount = totalCountResponse.length;
+        const totalCountResponse = await User.findAll();
+        const totalCount = totalCountResponse.length;
 
-      const users = await User.findAll({
-        limit,
-        offset: (page - 1) * limit,
-        order: [['created_at', 'DESC']],
-      });
+        const users = await User.findAll({
+          limit,
+          offset: (page - 1) * limit,
+          order: [['created_at', 'DESC']],
+          include: [
+            {
+              model: Playerid,
+              as: 'devices',
+              attributes: ['id'],
+            },
+          ],
+        });
 
-      return res.json({
-        totalCount,
-        users,
-      });
+        return res.json({
+          totalCount,
+          users,
+        });
+      }
+      return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
     } catch (err) {
       logger.error(`error getting users list: '${err}`);
       return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });

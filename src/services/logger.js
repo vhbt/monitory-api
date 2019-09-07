@@ -1,13 +1,9 @@
 import { createLogger, format, transports } from 'winston';
 
-const { combine, timestamp, printf } = format;
-
-const defaultFormat = printf(({ message, level, timestamp: time }) => {
-  return `{"timestamp":"${time}","message":"${message}","level":"${level}"}`;
-});
+const { combine, timestamp } = format;
 
 const logger = createLogger({
-  format: combine(timestamp(), defaultFormat),
+  format: combine(timestamp(), format.json()),
   transports: [
     new transports.File({ filename: 'error.log', level: 'error' }),
     new transports.File({ filename: 'combined.log' }),
