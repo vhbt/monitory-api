@@ -5,10 +5,12 @@ import News from '../app/models/News';
 import Course from '../app/models/Course';
 import Schedule from '../app/models/Schedule';
 import Playerid from '../app/models/Playerid';
+import Question from '../app/models/Question';
+import Answer from '../app/models/Answer';
 
 import databaseConfig from '../config/database';
 
-const models = [User, News, Course, Schedule, Playerid];
+const models = [User, News, Course, Schedule, Playerid, Question, Answer];
 
 class Database {
   constructor() {

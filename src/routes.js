@@ -10,6 +10,8 @@ import CourseController from './app/controllers/CourseController';
 import ScheduleController from './app/controllers/ScheduleController';
 import PlayeridController from './app/controllers/PlayeridController';
 import NotificationController from './app/controllers/NotificationController';
+import QuestionController from './app/controllers/QuestionController';
+import AnswerController from './app/controllers/AnswerController';
 
 import validateUserStore from './app/validators/UserStore';
 import validateUserUpdate from './app/validators/UserUpdate';
@@ -19,6 +21,8 @@ import validateFileStore from './app/validators/FileStore';
 import validateCourseStore from './app/validators/CourseStore';
 import validatePlayeridDelete from './app/validators/PlayeridDelete';
 import validateNotificationStore from './app/validators/NotificationStore';
+import validateQuestionStore from './app/validators/QuestionStore';
+import validateAnswerStore from './app/validators/AnswerStore';
 
 import scrapeSchedules from './scraper';
 import OSCleaner from './oscleaner';
@@ -56,6 +60,11 @@ routes.post(
   validateNotificationStore,
   NotificationController.store
 );
+
+routes.get('/questions', QuestionController.index);
+routes.post('/questions', validateQuestionStore, QuestionController.store);
+
+routes.post('/answers', validateAnswerStore, AnswerController.store);
 
 routes.get('/scrape-schedules', scrapeSchedules.run);
 routes.get('/oscleaner', OSCleaner.run);
