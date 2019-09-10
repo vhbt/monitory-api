@@ -1,16 +1,52 @@
 import Question from '../models/Question';
+import Answer from '../models/Answer';
 import User from '../models/User';
 
 import AuthenticateUserService from '../services/AuthenticateUserService';
 
 class QuestionController {
   async index(req, res) {
-    const question = await Question.findAll({
-      limit: 1,
-      order: [['created_at', 'DESC']],
-    });
+    try {
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 1;
 
-    return res.json(question);
+      const questions = await Question.findAll({
+        limit,
+        offset: (page - 1) * limit,
+        order: [['created_at', 'DESC']],
+        include: [
+          {
+            model: Answer,
+            as: 'answers',
+            attributes: ['id', 'content', 'user_id', 'created_at'],
+            include: [
+              {
+                model: User,
+                as: 'user',
+                attributes: [
+                  'id',
+                  'nome_usual',
+                  'curso',
+                  'curso_ano',
+                  'curso_turno',
+                ],
+              },
+            ],
+          },
+        ],
+      });
+
+      const totalCountResponse = await Question.findAll();
+      const totalCount = totalCountResponse.length;
+
+      if (req.query.new) {
+        return res.json({ totalCount, questions });
+      }
+
+      return res.json(questions);
+    } catch (err) {
+      return res.status(500).json({ type: 'error', detail: err });
+    }
   }
 
   async store(req, res) {

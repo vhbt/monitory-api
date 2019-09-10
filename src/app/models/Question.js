@@ -15,7 +15,7 @@ class Question extends Model {
   }
 
   static associate(models) {
-    this.hasMany(models.Answer, { foreignKey: 'question_id', as: 'question' });
+    this.hasMany(models.Answer, { foreignKey: 'question_id', as: 'answers' });
   }
 }
 
