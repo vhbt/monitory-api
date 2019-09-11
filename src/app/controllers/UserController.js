@@ -1,3 +1,4 @@
+import { Op } from 'sequelize';
 import logger from '../../services/logger';
 import User from '../models/User';
 import Playerid from '../models/Playerid';
@@ -33,13 +34,18 @@ class UserController {
         const page = req.query.page || 1;
         const limit = req.query.limit || 8;
 
-        const totalCountResponse = await User.findAll();
+        const where = req.query.search
+          ? { nome_completo: { [Op.like]: `%${req.query.search}%` } }
+          : null;
+
+        const totalCountResponse = await User.findAll({ where });
         const totalCount = totalCountResponse.length;
 
         const users = await User.findAll({
           limit,
           offset: (page - 1) * limit,
           order: [['created_at', 'DESC']],
+          where,
           include: [
             {
               model: Playerid,
