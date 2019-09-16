@@ -13,7 +13,10 @@ class QuestionController {
       const questions = await Question.findAll({
         limit,
         offset: (page - 1) * limit,
-        order: [['created_at', 'DESC']],
+        order: [
+          ['created_at', 'DESC'],
+          [{ model: Answer, as: 'answers' }, 'created_at', 'DESC'],
+        ],
         include: [
           {
             model: Answer,
