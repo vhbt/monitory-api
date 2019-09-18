@@ -64,19 +64,7 @@ class QuestionController {
 
       const [, token] = authHeader.split(' ');
 
-      const { id } = await AuthenticateUserService.run({ token });
-
-      const userIsAdmin = await User.findOne({
-        where: {
-          id,
-          admin: true,
-        },
-      });
-
-      if (!userIsAdmin)
-        return res
-          .status(401)
-          .json({ type: 'error', detail: 'Não autorizado.' });
+      await AuthenticateUserService.run({ token, needsAdmin: true });
 
       const { content } = req.body;
 
@@ -95,7 +83,10 @@ class QuestionController {
 
       return res.json(question);
     } catch (err) {
-      return res.status(500).json({ type: 'error', detail: err });
+      return res.status(err.status || err.response.status).json({
+        type: 'error',
+        detail: err.response.statusText || err.message,
+      });
     }
   }
 }

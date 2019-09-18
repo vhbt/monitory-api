@@ -1,6 +1,5 @@
 import logger from '../../services/logger';
 import News from '../models/News';
-import User from '../models/User';
 
 import AuthenticateUserService from '../services/AuthenticateUserService';
 
@@ -28,19 +27,7 @@ class NewsController {
     const [, token] = authHeader.split(' ');
 
     try {
-      const { id } = await AuthenticateUserService.run({ token });
-
-      const userIsAdmin = await User.findOne({
-        where: {
-          id,
-          admin: true,
-        },
-      });
-
-      if (!userIsAdmin)
-        return res
-          .status(401)
-          .json({ type: 'error', detail: 'Não autorizado.' });
+      await AuthenticateUserService.run({ token, needsAdmin: true });
 
       const { title, content, category, banner, banner_thumb } = req.body;
 
@@ -55,7 +42,10 @@ class NewsController {
       return res.json(news);
     } catch (err) {
       logger.error(`error creating news: '${err}`);
-      return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
+      return res.status(err.status || err.response.status).json({
+        type: 'error',
+        detail: err.response.statusText || err.message,
+      });
     }
   }
 
@@ -69,25 +59,13 @@ class NewsController {
     const [, token] = authHeader.split(' ');
 
     try {
-      const { id } = await AuthenticateUserService.run({ token });
+      await AuthenticateUserService.run({ token, needsAdmin: true });
 
-      const userIsAdmin = await User.findOne({
-        where: {
-          id,
-          admin: true,
-        },
-      });
-
-      if (!userIsAdmin)
-        return res
-          .status(401)
-          .json({ type: 'error', detail: 'Não autorizado.' });
-
-      const { id: news_id } = req.body;
+      const { id } = req.body;
 
       await News.destroy({
         where: {
-          id: news_id,
+          id,
         },
       });
 
@@ -96,7 +74,10 @@ class NewsController {
       return res.json({ type: 'success', detail: 'Notícia deletada!' });
     } catch (err) {
       logger.error(`error deleting news: '${err}`);
-      return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
+      return res.status(err.status || err.response.status).json({
+        type: 'error',
+        detail: err.response.statusText || err.message,
+      });
     }
   }
 }

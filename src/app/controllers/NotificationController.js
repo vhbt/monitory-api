@@ -1,10 +1,24 @@
 import logger from '../../services/logger';
 import { OneSignalApi } from '../../services/api';
 
+import AuthenticateUserService from '../services/AuthenticateUserService';
+
 class NotificationController {
   async store(req, res) {
     try {
       const { title, message, playerids } = req.body;
+
+      const authHeader = req.headers.authorization;
+
+      if (!authHeader) {
+        return res
+          .status(401)
+          .json({ type: 'error', detail: 'Não autorizado.' });
+      }
+
+      const [, token] = authHeader.split(' ');
+
+      await AuthenticateUserService.run({ token, needsAdmin: true });
 
       logger.info(
         `creating notification '${title}' with message '${message}' to ${playerids.length} playerids`
@@ -20,7 +34,10 @@ class NotificationController {
       return res.json(response.data);
     } catch (err) {
       logger.error(`error while creating notification: '${err}'`);
-      return res.status(500).json(err);
+      return res.status(err.status || err.response.status).json({
+        type: 'error',
+        detail: err.response.statusText || err.message,
+      });
     }
   }
 }

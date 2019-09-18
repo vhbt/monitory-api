@@ -12,6 +12,9 @@ import PlayeridController from './app/controllers/PlayeridController';
 import NotificationController from './app/controllers/NotificationController';
 import QuestionController from './app/controllers/QuestionController';
 import AnswerController from './app/controllers/AnswerController';
+import EventController from './app/controllers/EventController';
+import CandidatureController from './app/controllers/CandidatureController';
+import VoteController from './app/controllers/VoteController';
 
 import validateUserStore from './app/validators/UserStore';
 import validateUserUpdate from './app/validators/UserUpdate';
@@ -23,6 +26,9 @@ import validatePlayeridDelete from './app/validators/PlayeridDelete';
 import validateNotificationStore from './app/validators/NotificationStore';
 import validateQuestionStore from './app/validators/QuestionStore';
 import validateAnswerStore from './app/validators/AnswerStore';
+import validateCandidatureStore from './app/validators/CandidatureStore';
+import validateEventStore from './app/validators/EventStore';
+import validateVoteStore from './app/validators/VoteStore';
 
 import scrapeSchedules from './scraper';
 import OSCleaner from './oscleaner';
@@ -65,6 +71,18 @@ routes.get('/questions', QuestionController.index);
 routes.post('/questions', validateQuestionStore, QuestionController.store);
 
 routes.post('/answers', validateAnswerStore, AnswerController.store);
+
+routes.get('/events', EventController.index);
+routes.get('/events/:id', EventController.view);
+routes.post('/events', validateEventStore, EventController.store);
+
+routes.post(
+  '/candidatures',
+  validateCandidatureStore,
+  CandidatureController.store
+);
+
+routes.post('/votes', validateVoteStore, VoteController.store);
 
 routes.get('/scrape-schedules', scrapeSchedules.run);
 routes.get('/oscleaner', OSCleaner.run);

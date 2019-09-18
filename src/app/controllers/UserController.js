@@ -15,52 +15,36 @@ class UserController {
     const [, token] = authHeader.split(' ');
 
     try {
-      const { id } = await AuthenticateUserService.run({ token });
+      await AuthenticateUserService.run({ token, needsAdmin: true });
 
-      if (id) {
-        const userIsAdmin = await User.findOne({
-          where: {
-            id,
-            admin: true,
+      const page = req.query.page || 1;
+      const limit = req.query.limit || 8;
+
+      const where = req.query.search
+        ? { nome_completo: { [Op.like]: `%${req.query.search}%` } }
+        : null;
+
+      const totalCountResponse = await User.findAll({ where });
+      const totalCount = totalCountResponse.length;
+
+      const users = await User.findAll({
+        limit,
+        offset: (page - 1) * limit,
+        order: [['created_at', 'DESC']],
+        where,
+        include: [
+          {
+            model: Playerid,
+            as: 'devices',
+            attributes: ['id'],
           },
-          order: [['created_at', 'DESC']],
-        });
+        ],
+      });
 
-        if (!userIsAdmin)
-          return res
-            .status(401)
-            .json({ type: 'error', detail: 'Não autorizado.' });
-
-        const page = req.query.page || 1;
-        const limit = req.query.limit || 8;
-
-        const where = req.query.search
-          ? { nome_completo: { [Op.like]: `%${req.query.search}%` } }
-          : null;
-
-        const totalCountResponse = await User.findAll({ where });
-        const totalCount = totalCountResponse.length;
-
-        const users = await User.findAll({
-          limit,
-          offset: (page - 1) * limit,
-          order: [['created_at', 'DESC']],
-          where,
-          include: [
-            {
-              model: Playerid,
-              as: 'devices',
-              attributes: ['id'],
-            },
-          ],
-        });
-
-        return res.json({
-          totalCount,
-          users,
-        });
-      }
-      return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });
+      return res.json({
+        totalCount,
+        users,
+      });
     } catch (err) {
       logger.error(`error getting users list: '${err}`);
       return res.status(401).json({ type: 'error', detail: 'Não autorizado.' });

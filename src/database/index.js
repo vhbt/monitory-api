@@ -7,10 +7,24 @@ import Schedule from '../app/models/Schedule';
 import Playerid from '../app/models/Playerid';
 import Question from '../app/models/Question';
 import Answer from '../app/models/Answer';
+import Event from '../app/models/Event';
+import Candidature from '../app/models/Candidature';
+import Vote from '../app/models/Vote';
 
 import databaseConfig from '../config/database';
 
-const models = [User, News, Course, Schedule, Playerid, Question, Answer];
+const models = [
+  User,
+  News,
+  Course,
+  Schedule,
+  Playerid,
+  Question,
+  Answer,
+  Event,
+  Candidature,
+  Vote,
+];
 
 class Database {
   constructor() {
