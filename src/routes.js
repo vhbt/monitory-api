@@ -28,6 +28,7 @@ import validateQuestionStore from './app/validators/QuestionStore';
 import validateAnswerStore from './app/validators/AnswerStore';
 import validateCandidatureStore from './app/validators/CandidatureStore';
 import validateEventStore from './app/validators/EventStore';
+import validateEventUpdate from './app/validators/EventUpdate';
 import validateVoteStore from './app/validators/VoteStore';
 
 import scrapeSchedules from './scraper';
@@ -75,6 +76,7 @@ routes.post('/answers', validateAnswerStore, AnswerController.store);
 routes.get('/events', EventController.index);
 routes.get('/events/:id', EventController.view);
 routes.post('/events', validateEventStore, EventController.store);
+routes.put('/events', validateEventUpdate, EventController.update);
 
 routes.post(
   '/candidatures',
@@ -82,6 +84,7 @@ routes.post(
   CandidatureController.store
 );
 
+routes.get('/votes/:id', VoteController.index);
 routes.post('/votes', validateVoteStore, VoteController.store);
 
 routes.get('/scrape-schedules', scrapeSchedules.run);

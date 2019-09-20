@@ -1,3 +1,4 @@
+import { Sequelize, Op } from 'sequelize';
 import Event from '../models/Event';
 import Candidature from '../models/Candidature';
 import User from '../models/User';
@@ -38,7 +39,19 @@ class EventController {
   }
 
   async index(req, res) {
+    const { past } = req.query;
+
+    const where = {};
+
+    if (!past) {
+      where.until_date = {
+        [Op.between]: [new Date(), Sequelize.col('until_date')],
+      };
+    }
+
     const events = await Event.findAll({
+      order: [['date', 'desc']],
+      where,
       include: [
         {
           model: Candidature,
@@ -116,6 +129,61 @@ class EventController {
       });
 
       return res.json(event);
+    } catch (err) {
+      return res.status(err.status || err.response.status).json({
+        type: 'error',
+        detail: err.response.statusText || err.message,
+      });
+    }
+  }
+
+  async update(req, res) {
+    try {
+      const { id, title } = req.body;
+
+      const authHeader = req.headers.authorization;
+
+      if (!authHeader) {
+        return res
+          .status(401)
+          .json({ type: 'error', detail: 'Não autorizado.' });
+      }
+
+      const [, token] = authHeader.split(' ');
+
+      await AuthenticateUserService.run({ token, needsAdmin: true });
+
+      const eventExists = await Event.findOne({
+        where: {
+          id,
+        },
+      });
+
+      if (!eventExists) {
+        return res.status(401).json({
+          type: 'error',
+          detail: 'Evento inexistente.',
+        });
+      }
+
+      if (title) {
+        const eventTitleAlreadyExists = await Event.findOne({
+          where: {
+            title,
+          },
+        });
+
+        if (eventTitleAlreadyExists) {
+          return res.status(401).json({
+            type: 'error',
+            detail: 'Já existe um evento com esse nome.',
+          });
+        }
+      }
+
+      await eventExists.update(req.body);
+
+      return res.json(eventExists);
     } catch (err) {
       return res.status(err.status || err.response.status).json({
         type: 'error',

@@ -1,4 +1,5 @@
 import Sequelize, { Model } from 'sequelize';
+import { isBefore } from 'date-fns';
 
 class Event extends Model {
   static init(sequelize) {
@@ -12,6 +13,12 @@ class Event extends Model {
         image: Sequelize.STRING,
         date: Sequelize.DATE,
         until_date: Sequelize.DATE,
+        past: {
+          type: Sequelize.VIRTUAL,
+          get() {
+            return isBefore(this.until_date || this.date, new Date());
+          },
+        },
       },
       {
         sequelize,
