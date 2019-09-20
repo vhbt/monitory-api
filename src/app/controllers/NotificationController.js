@@ -7,6 +7,7 @@ class NotificationController {
   async store(req, res) {
     try {
       const { title, message, playerids } = req.body;
+      const priority = req.body.priority || 5;
 
       const authHeader = req.headers.authorization;
 
@@ -29,6 +30,7 @@ class NotificationController {
         include_player_ids: playerids,
         headings: { en: title },
         contents: { en: message },
+        priority,
       });
 
       return res.json(response.data);

@@ -1,5 +1,7 @@
 import Question from '../models/Question';
 import Answer from '../models/Answer';
+import Playerid from '../models/Playerid';
+import { OneSignalApi } from '../../services/api';
 
 import AuthenticateUserService from '../services/AuthenticateUserService';
 
@@ -33,12 +35,32 @@ class AnswerController {
 
       const answer = await Answer.create({ content, question_id, user_id });
 
+      const adminIds = await Playerid.findAll({
+        where: {
+          user_id: 234566,
+        },
+        attributes: ['id'],
+      });
+
+      const ids = [];
+      adminIds.map(player => ids.push(player.id));
+
+      await OneSignalApi.post('notifications', {
+        app_id: process.env.ONESIGNAL_APP_ID,
+        include_player_ids: ids,
+        headings: { en: 'Novo feedback' },
+        contents: { en: content },
+      });
+
       return res.json(answer);
     } catch (err) {
-      return res.status(err.status || err.response.status).json({
-        type: 'error',
-        detail: err.response.statusText || err.message,
-      });
+      if (err.status) {
+        return res.status(err.status || err.response.status).json({
+          type: 'error',
+          detail: err.response.statusText || err.message,
+        });
+      }
+      return res.status(500).json(err);
     }
   }
 }
